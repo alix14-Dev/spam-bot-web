@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google-site-verification" content="XQNuvoU7aWpa_JFnC3feRMbMh5WmhM0modQNK7TDEFc" />
+<title>سبام بوت - واجهة احترافية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+<style>*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Cairo',sans-serif;scroll-behavior:smooth;transition:0.3s;background:#f5f5f5;color:#121212;}
+a{text-decoration:none;color:inherit;}
+ul{list-style:none;}
+
+/* VARIABLES */
+:root{
+  --grad-start:#6a11cb;
+  --grad-end:#2575fc;
+  --bg-light:#f5f5f5;
+  --bg-dark:#121212;
+  --text-light:#121212;
+  --text-dark:#f5f5f5;
+}
+
+/* DARK/LIGHT MODE */
+body.light-mode{background:var(--bg-light);color:var(--text-light);}
+body.dark-mode{background:var(--bg-dark);color:var(--text-dark);}
+
+/* NAVBAR */
+nav{
+  position:fixed;top:0;left:0;width:100%;display:flex;justify-content:space-between;align-items:center;
+  padding:1rem 2rem;background:linear-gradient(90deg,var(--grad-start),var(--grad-end));color:white;z-index:1000;box-shadow:0 5px 15px rgba(0,0,0,0.2);
+}
+nav .logo{font-weight:bold;font-size:1.5rem;letter-spacing:1px;cursor:pointer;}
+nav ul{display:flex;gap:1.5rem;}
+nav ul li{cursor:pointer;transition:0.3s;}
+nav ul li:hover{opacity:0.7;}
+nav .mode-toggle{cursor:pointer;font-size:1.4rem;transition:0.3s;}
+
+/* HERO */
+#hero{
+  height:100vh;background:linear-gradient(135deg,var(--grad-start),var(--grad-end));
+  display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:white;position:relative;
+}
+#hero h1{font-size:3rem;margin-bottom:1rem;text-shadow:2px 2px 10px rgba(0,0,0,0.4);}
+#hero p{font-size:1.3rem;margin-bottom:2rem;max-width:800px;line-height:1.5;text-shadow:1px 1px 6px rgba(0,0,0,0.4);}
+#hero button{
+  padding:1rem 2rem;font-size:1.2rem;font-weight:bold;border:none;border-radius:50px;cursor:pointer;
+  background:linear-gradient(90deg,#ff416c,#ff4b2b);color:white;box-shadow:0 5px 20px rgba(0,0,0,0.3);
+  transition:0.3s;
+}
+#hero button:hover{transform:translateY(-5px);box-shadow:0 10px 25px rgba(0,0,0,0.4);}
+
+/* SECTIONS */
+section{padding:100px 20px 60px 20px;min-height:100vh;display:none;opacity:0;transition:0.5s;}
+section.active{display:block;opacity:1;}
+section h2{text-align:center;margin-bottom:2rem;font-size:2.2rem;position:relative;}
+section h2::after{content:"";width:60px;height:4px;background:linear-gradient(90deg,var(--grad-start),var(--grad-end));display:block;margin:10px auto 0;border-radius:2px;}
+
+/* CARDS */
+.cards, .steps{display:flex;flex-wrap:wrap;gap:1rem;justify-content:center;}
+.card, .step-card{
+  background:linear-gradient(135deg,#6a11cb,#2575fc);color:white;padding:1.5rem 2rem;border-radius:20px;
+  min-width:280px;transition:0.6s;box-shadow:0 8px 25px rgba(0,0,0,0.3);opacity:0;transform:translateY(40px);
+}
+.card.show, .step-card.show{opacity:1;transform:translateY(0);}
+.card:hover, .step-card:hover{transform:translateY(-8px);opacity:0.95;box-shadow:0 12px 35px rgba(0,0,0,0.4);}
+
+/* LANGUAGE SELECT */
+.select-language{margin-bottom:2rem;display:flex;justify-content:center;}
+select{padding:0.7rem 1.2rem;border-radius:15px;border:none;outline:none;font-weight:bold;cursor:pointer;box-shadow:0 4px 15px rgba(0,0,0,0.2);}
+
+/* RETURN BUTTON */
+.return-btn{
+  display:block;margin:2rem auto 0 auto;padding:0.8rem 2rem;border:none;border-radius:50px;
+  background:linear-gradient(90deg,#ff416c,#ff4b2b);color:white;font-weight:bold;cursor:pointer;transition:0.3s;
+  box-shadow:0 5px 20px rgba(0,0,0,0.3);
+}
+.return-btn:hover{transform:translateY(-5px);box-shadow:0 10px 25px rgba(0,0,0,0.4);}
+
+/* BOT LINK SECTION */
+.bot-link-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.bot-link {
+  font-size: 1.2rem;
+  background: white;
+  padding: 1rem 2rem;
+  border-radius: 15px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  color: #121212;
+  text-align: center;
+  word-break: break-all;
+}
+
+.copy-btn {
+  padding: 0.8rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  background: linear-gradient(90deg, #6a11cb, #2575fc);
+  color: white;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+.copy-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+}
+
+.copy-btn.copied {
+  background: linear-gradient(90deg, #00b09b, #96c93d);
+}
+
+/* FOOTER */
+footer{background:linear-gradient(90deg,#6a11cb,#2575fc);color:white;padding:1rem 0;text-align:center;font-size:0.95rem;position:relative;}
+footer a{color:white;margin-left:0.5rem;}
+
+/* RESPONSIVE */
+@media(max-width:768px){.cards,.steps{flex-direction:column;align-items:center;}}
+</style>
+</head>
+<body class="light-mode">
+
+<!-- NAVBAR -->
+<nav>
+  <div class="logo" onclick="showSection('hero')">سبام بوت</div>
+  <ul>
+    <li onclick="showSection('hero')" data-key="home">Home</li>
+    <li onclick="showSection('about')" data-key="about">About</li>
+    <li onclick="showSection('how')" data-key="how">How to Use</li>
+    <li onclick="showSection('bot-link')" data-key="botLink">Bot Link</li>
+  </ul>
+  <div class="mode-toggle" onclick="toggleMode()">☀️</div>
+</nav>
+
+<!-- HERO -->
+<section id="hero" class="active">
+  <h1 data-key="heroTitle">سبام بوت</h1>
+  <p data-key="heroDesc">إدارة رسائل تليجرام باحترافية وسهولة، مع دعم متعدد اللغات وتحكم كامل بالمستخدمين</p>
+  <button onclick="showSection('about')" data-key="startBtn">ابدأ الآن</button>
+</section>
+
+<!-- ABOUT SECTION -->
+<section id="about">
+  <h2 data-key="aboutTitle">About the Bot</h2>
+  <div class="select-language">
+    <select id="langSelect" onchange="changeLanguage()">
+      <option value="ar">العربية</option>
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="de">Deutsch</option>
+      <option value="it">Italiano</option>
+      <option value="fr">Français</option>
+      <option value="ru">Русский</option>
+      <option value="zh">中文</option>
+      <option value="ja">日本語</option>
+      <option value="tr">Türkçe</option>
+    </select>
+  </div>
+  <div class="cards" id="aboutCards"></div>
+  <button class="return-btn" onclick="showSection('hero')" data-key="returnBtn">العودة للرئيسية</button>
+</section>
+
+<!-- HOW TO USE SECTION -->
+<section id="how">
+  <h2 data-key="howTitle">How to Use</h2>
+  <div class="select-language">
+    <select id="langSelectHow" onchange="changeStepsLanguage()">
+      <option value="ar">العربية</option>
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="de">Deutsch</option>
+      <option value="it">Italiano</option>
+      <option value="fr">Français</option>
+      <option value="ru">Русский</option>
+      <option value="zh">中文</option>
+      <option value="ja">日本語</option>
+      <option value="tr">Türkçe</option>
+    </select>
+  </div>
+  <div class="steps" id="stepsContainer"></div>
+  <button class="return-btn" onclick="showSection('hero')" data-key="returnBtn">العودة للرئيسية</button>
+</section>
+
+<!-- BOT LINK SECTION -->
+<section id="bot-link">
+  <h2 data-key="botLinkTitle">Bot Link</h2>
+  <div class="select-language">
+    <select id="langSelectBotLink" onchange="changeBotLinkLanguage()">
+      <option value="ar">العربية</option>
+      <option value="en">English</option>
+      <option value="es">Español</option>
+      <option value="de">Deutsch</option>
+      <option value="it">Italiano</option>
+      <option value="fr">Français</option>
+      <option value="ru">Русский</option>
+      <option value="zh">中文</option>
+      <option value="ja">日本語</option>
+      <option value="tr">Türkçe</option>
+    </select>
+  </div>
+  <div class="bot-link-container">
+    <div class="bot-link">https://t.me/ali_spam_bot</div>
+    <button class="copy-btn" onclick="copyBotLink()" data-key="copyBtn">نسخ الرابط</button>
+  </div>
+  <button class="return-btn" onclick="showSection('hero')" data-key="returnBtn">العودة للرئيسية</button>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  DEV BY : @AL_I_DEV <a href="https://t.me/AL_I_DEV" target="_blank">✈️</a>
+</footer>
+
+<script>
+/* DARK/LIGHT MODE */
+function toggleMode(){
+  document.body.classList.toggle('dark-mode');
+  document.body.classList.toggle('light-mode');
+  document.querySelector('.mode-toggle').textContent = document.body.classList.contains('dark-mode') ? '🌙' : '☀️';
+}
+
+/* SPA SHOW SECTION */
+function showSection(id){
+  document.querySelectorAll('section').forEach(sec=>{
+    sec.classList.remove('active');
+  });
+  document.getElementById(id).classList.add('active');
+}
+
+/* TRANSLATIONS */
+const translations = {
+  ar: {
+    home: "الرئيسية",
+    about: "عن البوت",
+    how: "كيفية الاستخدام",
+    botLink: "رابط البوت",
+    heroTitle: "سبام بوت",
+    heroDesc: "إدارة رسائل تليجرام باحترافية وسهولة، مع دعم متعدد اللغات وتحكم كامل بالمستخدمين",
+    startBtn: "ابدأ الآن",
+    aboutTitle: "عن البوت",
+    howTitle: "كيفية الاستخدام",
+    botLinkTitle: "رابط البوت",
+    returnBtn: "العودة للرئيسية",
+    copyBtn: "نسخ الرابط"
+  },
+  en: {
+    home: "Home",
+    about: "About",
+    how: "How to Use",
+    botLink: "Bot Link",
+    heroTitle: "Spam Bot",
+    heroDesc: "Manage Telegram messages professionally and easily, with multi-language support and full user control",
+    startBtn: "Get Started",
+    aboutTitle: "About the Bot",
+    howTitle: "How to Use",
+    botLinkTitle: "Bot Link",
+    returnBtn: "Return to Home",
+    copyBtn: "Copy Link"
+  },
+  es: {
+    home: "Inicio",
+    about: "Acerca de",
+    how: "Cómo Usar",
+    botLink: "Enlace del Bot",
+    heroTitle: "Spam Bot",
+    heroDesc: "Gestiona mensajes de Telegram de forma profesional y sencilla, con soporte multilingüe y control total de usuarios",
+    startBtn: "Comenzar",
+    aboutTitle: "Acerca del Bot",
+    howTitle: "Cómo Usar",
+    botLinkTitle: "Enlace del Bot",
+    returnBtn: "Volver al Inicio",
+    copyBtn: "Copiar Enlace"
+  },
+  de: {
+    home: "Startseite",
+    about: "Über",
+    how: "Anleitung",
+    botLink: "Bot-Link",
+    heroTitle: "Spam Bot",
+    heroDesc: "Verwalten Sie Telegram-Nachrichten professionell und einfach, mit mehrsprachiger Unterstützung und vollständiger Benutzerkontrolle",
+    startBtn: "Loslegen",
+    aboutTitle: "Über den Bot",
+    howTitle: "Anleitung",
+    botLinkTitle: "Bot-Link",
+    returnBtn: "Zurück zur Startseite",
+    copyBtn: "Link kopieren"
+  },
+  it: {
+    home: "Home",
+    about: "Informazioni",
+    how: "Come Usare",
+    botLink: "Link del Bot",
+    heroTitle: "Spam Bot",
+    heroDesc: "Gestisci i messaggi di Telegram in modo professionale e semplice, con supporto multilingue e controllo completo degli utenti",
+    startBtn: "Inizia Ora",
+    aboutTitle: "Informazioni sul Bot",
+    howTitle: "Come Usare",
+    botLinkTitle: "Link del Bot",
+    returnBtn: "Torna alla Home",
+    copyBtn: "Copia Link"
+  },
+  fr: {
+    home: "Accueil",
+    about: "À propos",
+    how: "Comment Utiliser",
+    botLink: "Lien du Bot",
+    heroTitle: "Spam Bot",
+    heroDesc: "Gérez les messages Telegram professionnellement et facilement, avec support multilingue et contrôle complet des utilisateurs",
+    startBtn: "Commencer",
+    aboutTitle: "À propos du Bot",
+    howTitle: "Comment Utiliser",
+    botLinkTitle: "Lien du Bot",
+    returnBtn: "Retour à l'Accueil",
+    copyBtn: "Copier le Lien"
+  },
+  ru: {
+    home: "Главная",
+    about: "О боте",
+    how: "Как использовать",
+    botLink: "Ссылка на бота",
+    heroTitle: "Spam Bot",
+    heroDesc: "Управляйте сообщениями Telegram профессионально и легко, с поддержкой нескольких языков и полным контролем пользователей",
+    startBtn: "Начать",
+    aboutTitle: "О боте",
+    howTitle: "Как использовать",
+    botLinkTitle: "Ссылка на бота",
+    returnBtn: "Вернуться на главную",
+    copyBtn: "Копировать ссылку"
+  },
+  zh: {
+    home: "首页",
+    about: "关于",
+    how: "使用方法",
+    botLink: "机器人链接",
+    heroTitle: "Spam Bot",
+    heroDesc: "专业且轻松地管理Telegram消息，支持多语言和完整的用户控制",
+    startBtn: "开始使用",
+    aboutTitle: "关于机器人",
+    howTitle: "使用方法",
+    botLinkTitle: "机器人链接",
+    returnBtn: "返回首页",
+    copyBtn: "复制链接"
+  },
+  ja: {
+    home: "ホーム",
+    about: "概要",
+    how: "使い方",
+    botLink: "ボットリンク",
+    heroTitle: "Spam Bot",
+    heroDesc: "多言語サポートと完全なユーザー制御を備えた、プロフェッショナルで簡単なTelegramメッセージ管理",
+    startBtn: "始める",
+    aboutTitle: "ボットについて",
+    howTitle: "使い方",
+    botLinkTitle: "ボットリンク",
+    returnBtn: "ホームに戻る",
+    copyBtn: "リンクをコピー"
+  },
+  tr: {
+    home: "Ana Sayfa",
+    about: "Hakkında",
+    how: "Nasıl Kullanılır",
+    botLink: "Bot Bağlantısı",
+    heroTitle: "Spam Bot",
+    heroDesc: "Çok dilli destek ve tam kullanıcı kontrolü ile Telegram mesajlarını profesyonelce ve kolayca yönetin",
+    startBtn: "Başla",
+    aboutTitle: "Bot Hakkında",
+    howTitle: "Nasıl Kullanılır",
+    botLinkTitle: "Bot Bağlantısı",
+    returnBtn: "Ana Sayfaya Dön",
+    copyBtn: "Bağlantıyı Kopyala"
+  }
+};
+
+/* ABOUT TEXTS */
+const aboutTexts = {
+  ar:`سبام بوت هو نظام ذكي متطور يتيح للمستخدمين إرسال الرسائل النصية أو الصورية بشكل متكرر ودقيق عبر معرفات المستخدمين.\n\nتم تصميمه ليكون سريع، آمن، وسهل الاستخدام، مع دعمٍ لأكثر من 10 لغات مختلفة لتوفير تجربة شاملة ومريحة.\n\nقبل استخدام البوت، يجب على المستخدم توثيق نفسه أولاً، ثم إدخال كلمة المرور الخاصة بالاستخدام لضمان الأمان ومنع أي استخدام غير مصرح به.\nكما يرسل البوت الرسائل فقط إلى المستخدمين الذين سبق أن تفاعلوا معه سابقًا، حفاظًا على الخصوصية ومنع الإزعاج.\n\nيُعد هذا البوت أداة احترافية مثالية لتنظيم التواصل والإرسال الجماعي داخل تليجرام بكفاءة عالية.`,
+  en:`Spam Bot is an advanced smart system that allows users to send text or image messages repeatedly and accurately via user IDs.\n\nIt is designed to be fast, secure, and easy to use, supporting more than 10 different languages for a comprehensive experience.\n\nBefore using the bot, the user must first verify themselves, then enter the usage password to ensure security and prevent unauthorized use.\nThe bot sends messages only to users who have previously interacted with it, preserving privacy and preventing spam.\n\nThis bot is a professional tool ideal for organizing communication and mass sending on Telegram efficiently.`,
+  es:`Spam Bot es un sistema inteligente avanzado que permite a los usuarios enviar mensajes de texto o imágenes de manera repetida y precisa a través de IDs de usuario.\n\nEstá diseñado para ser rápido, seguro y fácil de usar, con soporte para más de 10 idiomas diferentes para una experiencia completa.\n\nAntes de usar el bot, el usuario debe verificarse primero, luego ingresar la contraseña de uso para garantizar la seguridad y prevenir el uso no autorizado.\nEl bot envía mensajes solo a los usuarios que han interactuado previamente, preservando la privacidad y evitando spam.\n\nEste bot es una herramienta profesional ideal para organizar la comunicación y el envío masivo en Telegram de manera eficiente.`,
+  de:`Spam Bot ist ein fortschrittliches intelligentes System, das es Benutzern ermöglicht, Text- oder Bildnachrichten wiederholt und genau über Benutzer-IDs zu senden.\n\nEs ist so konzipiert, dass es schnell, sicher und einfach zu bedienen ist und mehr als 10 verschiedene Sprachen für ein umfassendes Erlebnis unterstützt.\n\nBevor der Bot verwendet wird, muss sich der Benutzer zuerst verifizieren und dann das Nutzungspasswort eingeben, um Sicherheit und unbefugte Nutzung zu verhindern.\nDer Bot sendet Nachrichten nur an Benutzer, die zuvor mit ihm interagiert haben, um Privatsphäre zu wahren und Spam zu verhindern.\n\nDieser Bot ist ein professionelles Werkzeug, ideal zur Organisation von Kommunikation und Massenversand auf Telegram.`,
+  it:`Spam Bot è un sistema intelligente avanzato che consente agli utenti di inviare messaggi di testo o immagini in modo ripetuto e preciso tramite ID utente.\n\nÈ progettato per essere veloce, sicuro e facile da usare, supportando più di 10 lingue diverse per un'esperienza completa.\n\nPrima di utilizzare il bot, l'utente deve prima verificarsi e poi inserire la password d'uso per garantire la sicurezza e prevenire usi non autorizzati.\nIl bot invia messaggi solo agli utenti che hanno già interagito con esso, preservando la privacy e prevenendo lo spam.\n\nQuesto bot è uno strumento professionale ideale per organizzare la comunicazione e l'invio di massa su Telegram in modo efficiente.`,
+  fr:`Spam Bot est un système intelligent avancé qui permet aux utilisateurs d'envoyer des messages texte ou image de manière répétée et précise via des ID utilisateurs.\n\nIl est conçu pour être rapide, sûr et facile à utiliser, prenant en charge plus de 10 langues différentes pour une expérience complète.\n\nAvant d'utiliser le bot, l'utilisateur doit d'abord se vérifier, puis entrer le mot de passe d'utilisation pour assurer la sécurité et empêcher tout usage non autorisé.\nLe bot n'envoie des messages qu'aux utilisateurs ayant déjà interagi avec lui, préservant la confidentialité et évitant le spam.\n\nCe bot est un outil professionnel idéal pour organiser la communication et l'envoi en masse sur Telegram efficacement.`,
+  ru:`Spam Bot — это продвинутая умная система, позволяющая пользователям отправлять текстовые или графические сообщения многократно и точно через ID пользователей.\n\nОн разработан, чтобы быть быстрым, безопасным и простым в использовании, поддерживая более 10 разных языков для полноценного опыта.\n\nПеред использованием бота пользователь должен сначала пройти верификацию, затем ввести пароль для обеспечения безопасности и предотвращения несанкционированного использования.\nБот отправляет сообщения только пользователям, которые ранее взаимодействовали с ним, сохраняя конфиденциальность и предотвращая спам.\n\nЭтот бот является профессиональным инструментом, идеально подходящим для организации общения и массовой рассылки в Telegram.`,
+  zh:`Spam Bot是一个先进的智能系统，允许用户通过用户ID重复且准确地发送文本或图像消息。\n\n它设计快速、安全且易于使用，支持超过10种不同语言，提供全面体验。\n\n在使用机器人之前，用户必须先验证自己，然后输入使用密码以确保安全并防止未经授权的使用。\n机器人仅向以前与其互动的用户发送消息，以保护隐私并防止垃圾信息。\n\n此机器人是组织Telegram通信和群发的专业工具。`,
+  ja:`Spam Botは、高度なスマートシステムで、ユーザーがIDを介してテキストまたは画像メッセージを繰り返し正確に送信できます。\n\n高速、安全、使いやすく設計されており、10以上の異なる言語に対応して包括的な体験を提供します。\n\nボットを使用する前に、ユーザーはまず本人確認を行い、使用パスワードを入力して安全を確保し、不正使用を防ぐ必要があります。\nボットは以前にやり取りしたユーザーにのみメッセージを送信し、プライバシーを保護し、スパムを防ぎます。\n\nこのボットは、Telegramでのコミュニケーションと大量送信を効率的に整理するためのプロフェッショナルツールです。`,
+  tr:`Spam Bot, kullanıcıların kullanıcı kimlikleri aracılığıyla metin veya resim mesajlarını tekrar tekrar ve doğru şekilde göndermesine olanak tanıyan gelişmiş bir akıllı sistemdir.\n\nHızlı, güvenli ve kullanımı kolay olacak şekilde tasarlanmıştır ve kapsamlı bir deneyim için 10'dan fazla farklı dili destekler.\n\nBotu kullanmadan önce, kullanıcı önce kendini doğrulamalı, ardından güvenliği sağlamak ve yetkisiz kullanımı önlemek için kullanım şifresini girmelidir.\nBot yalnızca daha önce onunla etkileşimde bulunmuş kullanıculara mesaj gönderir, gizliliği korur ve spam'i önler.\n\nBu bot, Telegram'da iletişimi ve toplu gönderimleri verimli bir şekilde düzenlemek için ideal profesyonel bir araçtır.`
+};
+
+const stepsTexts = {
+  ar:[
+    'أولاً: تضغط ستارت',
+    'ثانياً: تختار لغتك',
+    'ثالثاً: اضغط على زر التوثيق لإرسال رقم هاتفك وتوثيق نفسك فورياً',
+    'رابعاً: اكتب كلمة السر الخاصة بالبوت',
+    'خامساً: اكتب عدد الرسائل المطلوب إرسالها بحد أقصى 10000',
+    'سادساً: اختر نوع المحتوى المراد تكراره (نص أو صورة)',
+    'سابعاً: اكتب النص أو أرسل الصورة للبوت',
+    'ثامناً: اختر طريقة الإرسال، عن طريق الـ ID الخاص بالهدف أو الرابط',
+    'تاسعاً: اكتب الـ ID أو اجعل الهدف يدخل الرابط',
+    'عاشراً: استمتع'
+  ],
+  en:[
+    'Step 1: Press Start',
+    'Step 2: Choose your language',
+    'Step 3: Click Verify button to send your phone and verify immediately',
+    'Step 4: Enter bot password',
+    'Step 5: Enter number of messages (max 10000)',
+    'Step 6: Choose content type (Text or Image)',
+    'Step 7: Write text or send image to bot',
+    'Step 8: Choose sending method via ID or link',
+    'Step 9: Enter ID or let target join the link',
+    'Step 10: Enjoy'
+  ],
+  es:[
+    'Paso 1: Presiona Iniciar',
+    'Paso 2: Elige tu idioma',
+    'Paso 3: Haz clic en el botón Verificar para enviar tu teléfono y verificar inmediatamente',
+    'Paso 4: Ingresa la contraseña del bot',
+    'Paso 5: Ingresa el número de mensajes (máx. 10000)',
+    'Paso 6: Elige el tipo de contenido (Texto o Imagen)',
+    'Paso 7: Escribe el texto o envía la imagen al bot',
+    'Paso 8: Elige el método de envío por ID o enlace',
+    'Paso 9: Ingresa el ID o haz que el objetivo se una al enlace',
+    'Paso 10: Disfruta'
+  ],
+  de:[
+    'Schritt 1: Start drücken',
+    'Schritt 2: Wählen Sie Ihre Sprache',
+    'Schritt 3: Klicken Sie auf die Schaltfläche "Verifizieren", um Ihr Telefon zu senden und sofort zu verifizieren',
+    'Schritt 4: Bot-Passwort eingeben',
+    'Schritt 5: Anzahl der Nachrichten eingeben (max. 10000)',
+    'Schritt 6: Inhaltstyp wählen (Text oder Bild)',
+    'Schritt 7: Text schreiben oder Bild an Bot senden',
+    'Schritt 8: Senden-Methode per ID oder Link wählen',
+    'Schritt 9: ID eingeben oder Ziel zum Link einladen',
+    'Schritt 10: Genießen'
+  ],
+  it:[
+    'Passo 1: Premi Avvia',
+    'Passo 2: Scegli la tua lingua',
+    'Passo 3: Clicca sul pulsante Verifica per inviare il tuo telefono e verificare immediatamente',
+    'Passo 4: Inserisci la password del bot',
+    'Passo 5: Inserisci il numero di messaggi (max 10000)',
+    'Passo 6: Scegli il tipo di contenuto (Testo o Immagine)',
+    'Passo 7: Scrivi il testo o invia l\'immagine al bot',
+    'Passo 8: Scegli il metodo di invio tramite ID o link',
+    'Passo 9: Inserisci l\'ID o fai entrare il target nel link',
+    'Passo 10: Goditi'
+  ],
+  fr:[
+    'Étape 1 : Appuyez sur Démarrer',
+    'Étape 2 : Choisissez votre langue',
+    'Étape 3 : Cliquez sur le bouton Vérifier pour envoyer votre téléphone et vérifier immédiatement',
+    'Étape 4 : Entrez le mot de passe du bot',
+    'Étape 5 : Entrez le nombre de messages (max 10000)',
+    'Étape 6 : Choisissez le type de contenu (Texte ou Image)',
+    'Étape 7 : Écrivez le texte ou envoyez l\'image au bot',
+    'Étape 8 : Choisissez la méthode d\'envoi par ID ou lien',
+    'Étape 9 : Entrez l\'ID ou faites rejoindre la cible par le lien',
+    'Étape 10 : Profitez'
+  ],
+  ru:[
+    'Шаг 1: Нажмите Старт',
+    'Шаг 2: Выберите язык',
+    'Шаг 3: Нажмите кнопку Проверить, чтобы отправить свой телефон и немедленно подтвердить',
+    'Шаг 4: Введите пароль бота',
+    'Шаг 5: Введите количество сообщений (макс. 10000)',
+    'Шаг 6: Выберите тип контента (Текст или Изображение)',
+    'Шаг 7: Напишите текст или отправьте изображение боту',
+    'Шаг 8: Выберите метод отправки через ID или ссылку',
+    'Шаг 9: Введите ID или заставьте цель присоединиться по ссылке',
+    'Шаг 10: Наслаждайтесь'
+  ],
+  zh:[
+    '步骤1：按开始',
+    '步骤2：选择您的语言',
+    '步骤3：点击验证按钮发送您的手机并立即验证',
+    '步骤4：输入机器人密码',
+    '步骤5：输入消息数量（最多10000）',
+    '步骤6：选择内容类型（文本或图像）',
+    '步骤7：写文本或发送图像给机器人',
+    '步骤8：选择通过ID或链接发送的方法',
+    '步骤9：输入ID或让目标加入链接',
+    '步骤10：享受'
+  ],
+  ja:[
+    'ステップ1：スタートを押す',
+    'ステップ2：言語を選択',
+    'ステップ3：確認ボタンをクリックして電話番号を送信し、すぐに確認',
+    'ステップ4：ボットのパスワードを入力',
+    'ステップ5：メッセージ数を入力（最大10000）',
+    'ステップ6：コンテンツタイプを選択（テキストまたは画像）',
+    'ステップ7：テキストを書くか画像をボットに送信',
+    'ステップ8：IDまたはリンクによる送信方法を選択',
+    'ステップ9：IDを入力するか、ターゲットにリンクに参加させる',
+    'ステップ10：楽しむ'
+  ],
+  tr:[
+    'Adım 1: Başlat\'a basın',
+    'Adım 2: Dilinizi seçin',
+    'Adım 3: Telefonunuzu göndermek ve hemen doğrulamak için Doğrula düğmesine tıklayın',
+    'Adım 4: Bot şifresini girin',
+    'Adım 5: Mesaj sayısını girin (maks. 10000)',
+    'Adım 6: İçerik türünü seçin (Metin veya Resim)',
+    'Adım 7: Metin yazın veya resmi bota gönderin',
+    'Adım 8: ID veya bağlantı yoluyla gönderme yöntemini seçin',
+    'Adım 9: ID\'yi girin veya hedefin bağlantıya katılmasını sağlayın',
+    'Adım 10: Keyfini çıkarın'
+  ]
+};
+
+/* UPDATE ALL TEXT CONTENT */
+function updateAllTexts(lang = 'ar') {
+  // Update navigation
+  document.querySelectorAll('[data-key]').forEach(element => {
+    const key = element.getAttribute('data-key');
+    if (translations[lang] && translations[lang][key]) {
+      element.textContent = translations[lang][key];
+    }
+  });
+  
+  // Update language selectors
+  document.querySelectorAll('select').forEach(select => {
+    select.value = lang;
+  });
+}
+
+/* POPULATE ABOUT */
+function populateAbout(lang='ar'){
+  const container=document.getElementById('aboutCards');
+  container.innerHTML='';
+  const paragraphs = aboutTexts[lang].split('\n\n');
+  paragraphs.forEach(p=>{
+    const card=document.createElement('div');
+    card.className='card';
+    card.innerHTML=`<p>${p}</p>`;
+    container.appendChild(card);
+  });
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){entry.target.classList.add('show');}
+    });
+  }, {threshold:0.2});
+  document.querySelectorAll('.card').forEach(card=>observer.observe(card));
+}
+
+/* CHANGE LANGUAGE */
+function changeLanguage(){
+  const lang = document.getElementById('langSelect').value;
+  populateAbout(lang);
+  updateAllTexts(lang);
+}
+
+/* POPULATE STEPS */
+function populateSteps(lang='ar'){
+  const container=document.getElementById('stepsContainer');
+  container.innerHTML='';
+  const steps = stepsTexts[lang] || stepsTexts['ar'];
+  steps.forEach(s=>{
+    const step=document.createElement('div');
+    step.className='step-card';
+    step.innerHTML=`<p>${s}</p>`;
+    container.appendChild(step);
+  });
+  const observer = new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){entry.target.classList.add('show');}
+    });
+  }, {threshold:0.2});
+  document.querySelectorAll('.step-card').forEach(step=>observer.observe(step));
+}
+
+/* CHANGE STEPS LANGUAGE */
+function changeStepsLanguage(){
+  const lang = document.getElementById('langSelectHow').value;
+  populateSteps(lang);
+  updateAllTexts(lang);
+}
+
+/* CHANGE BOT LINK LANGUAGE */
+function changeBotLinkLanguage(){
+  const lang = document.getElementById('langSelectBotLink').value;
+  updateAllTexts(lang);
+}
+
+/* COPY BOT LINK */
+function copyBotLink() {
+  const link = 'https://t.me/ali_spam_bot';
+  navigator.clipboard.writeText(link).then(() => {
+    const copyBtn = document.querySelector('.copy-btn');
+    const originalText = copyBtn.textContent;
+    copyBtn.textContent = translations[currentLang]?.copiedBtn || 'تم النسخ!';
+    copyBtn.classList.add('copied');
+    
+    setTimeout(() => {
+      copyBtn.textContent = originalText;
+      copyBtn.classList.remove('copied');
+    }, 2000);
+  });
+}
+
+/* INITIAL POPULATE */
+let currentLang = 'ar';
+populateAbout();
+populateSteps();
+updateAllTexts();
+</script>
+
+</body>
+</html>
